@@ -52,7 +52,15 @@
     "publish": {
       "provider": "github",
       "releaseType": "release"
-    }
+    },
+    "electronLanguages": [
+      "en",
+      "fr"
+    ],
+    "dmg": {
+      "format": "ULFO"
+    },
+    "compression": "maximum"
   },
   "devDependencies": {
     "electron": "^44.6.0",
