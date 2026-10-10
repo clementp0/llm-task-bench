@@ -4,16 +4,22 @@
 
 ## Depuis la release
 
-1. Télécharge le `.dmg` depuis la [dernière release](https://github.com/clementp0/llm-task-bench/releases/latest) : `arm64` pour les Mac Apple Silicon (M1 et suivants), `x64` pour les Mac Intel.
-2. Ouvre-le et glisse LLM Task Bench dans Applications.
-3. La première fois, fais un clic droit sur l'app et choisis **Ouvrir**. L'app n'est pas signée par Apple, macOS demande donc une seule fois.
+1. Téléchargez le `.dmg` depuis la [dernière release](https://github.com/clementp0/llm-task-bench/releases/latest) : `arm64` pour les Mac Apple Silicon (M1 et suivants), `x64` pour les Mac Intel.
+2. Ouvrez-le et glissez LLM Task Bench dans Applications.
+3. Ouvrez l'app une fois. macOS la bloque car elle n'est pas notarisée par Apple : allez dans **Réglages Système → Confidentialité et sécurité**, descendez et cliquez sur **Ouvrir quand même**. Nécessaire uniquement la première fois.
+
+   Ou depuis un terminal :
+
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/LLM Task Bench.app"
+   ```
 
 ## Prérequis
 
 - macOS et `git`.
 - Au moins un de ces outils :
   - [Claude Code](https://claude.com/claude-code), connecté.
-  - [OpenCode](https://opencode.ai). Ajoute des fournisseurs (OpenRouter, OpenAI, Mistral…) avec `opencode auth login`.
+  - [OpenCode](https://opencode.ai). Ajoutez des fournisseurs (OpenRouter, OpenAI, Mistral…) avec `opencode auth login`.
 
 ## Depuis les sources
 
@@ -28,4 +34,4 @@ npm test           # vérification du moteur
 npm run dist       # construire dist/*.dmg
 ```
 
-Icône perso : place un PNG de 1024×1024 dans `build/icon.png` avant `npm run dist`.
+Icône perso : placez un PNG de 1024×1024 dans `build/icon.png` avant `npm run dist`.
