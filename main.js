@@ -52,6 +52,17 @@ const updateCheck = manual => checkForUpdates({ win, t: mainT, manual, isBusy: (
 ipcMain.handle('update:check', () => updateCheck(true));
 ipcMain.handle('app:version', () => app.getVersion());
 
+ipcMain.handle('run:exportPdf', async (_, name) => {
+  const { canceled, filePath } = await dialog.showSaveDialog(win, {
+    defaultPath: path.join(app.getPath('downloads'), `${name.replace(/[\/:*?"<>|]+/g, '-')}.pdf`),
+    filters: [{ name: 'PDF', extensions: ['pdf'] }],
+  });
+  if (canceled || !filePath) return null;
+  fs.writeFileSync(filePath, await win.webContents.printToPDF({ printBackground: true, pageSize: 'A4', margins: { marginType: 'default' } }));
+  shell.showItemInFolder(filePath);
+  return filePath;
+});
+
 ipcMain.handle('i18n:set', (_, lang) => {
   fs.writeFileSync(prefsFile(), JSON.stringify({ ...readJson(prefsFile(), {}), lang: lang === 'auto' ? undefined : lang }, null, 2));
 });

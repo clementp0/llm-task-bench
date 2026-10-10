@@ -281,7 +281,7 @@ function renderRun() {
     <header class="page-head">
       <div><h1>${esc(r.name || t('runs.untitled'))}</h1><p class="meta">${esc(meta)}</p></div>
       <div class="actions">
-        ${r.status === 'running' ? `<button class="btn" id="r-stop">${t('run.stop')}</button>` : `<button class="btn" id="r-delete">${t('run.delete')}</button><button class="btn" id="r-rerun">${t('run.rerun')}</button>`}
+        ${r.status === 'running' ? `<button class="btn" id="r-stop">${t('run.stop')}</button>` : `<button class="btn" id="r-delete">${t('run.delete')}</button><button class="btn" id="r-export">${t('run.exportPdf')}</button><button class="btn" id="r-rerun">${t('run.rerun')}</button>`}
       </div>
     </header>
     <p class="status-line"><span class="state ${esc(r.status)}">${t(`run.status.${r.status}`)}</span>${r.status === 'running' ? ` ${t('run.progress', { done, total })}${running ? `, ${t('run.working', { model: esc(running.model) })}` : ''}` : ''}</p>
@@ -303,7 +303,7 @@ function renderRun() {
         <tr><td><span class="model">${esc(s.model)}</span><small>${HARNESS[s.harness]}</small></td><td class="reason">${esc(failReason(r, s))}</td></tr>`).join('')}
       </tbody></table>
     </details>` : ''}
-    <div class="section-head"><h2>${t('run.attempts')}</h2>${hasOutputs ? `<button class="btn small" data-open="${esc(r.outputsDir)}">${t('run.openOutputs')}</button>` : ''}</div>
+    <div class="section-head attempts-head"><h2>${t('run.attempts')}</h2>${hasOutputs ? `<button class="btn small" data-open="${esc(r.outputsDir)}">${t('run.openOutputs')}</button>` : ''}</div>
     <div class="attempts">${attempts || `<p class="empty">${t('run.firstStarting')}</p>`}</div>`;
 }
 
@@ -528,6 +528,11 @@ document.addEventListener('click', async e => {
   } else if (btn.id === 'f-folder-clear') { setFolder(null); persistForm(); }
   else if (btn.id === 'f-start') start();
   else if (btn.id === 'r-stop') api.stopRun();
+  else if (btn.id === 'r-export') {
+    btn.disabled = true;
+    await api.exportPdf(`${state.run.name || t('runs.untitled')} - ${t(`run.view.${state.runView}`)}`);
+    btn.disabled = false;
+  }
   else if (btn.id === 'r-rerun') { fillForm(state.run); show('new'); }
   else if (btn.id === 'r-delete' && confirm(t('run.confirmDelete'))) { await api.deleteRun(state.run.id); show('new'); }
   else if (btn.id === 'update-check') {
@@ -593,6 +598,13 @@ api.onProbe(p => {
   state.avail = p.avail;
   renderModels();
   if (!$('#view-settings').hidden) renderSettings();
+});
+
+api.onUpdateStatus(s => {
+  const box = $('#update-status');
+  box.hidden = s.phase === 'error';
+  box.querySelector('p').textContent = t(s.phase === 'install' ? 'update.installing' : 'update.downloading', { version: s.version, pct: Math.round((s.progress || 0) * 100) });
+  box.querySelector('.progress span').style.transform = `scaleX(${s.phase === 'install' ? 1 : s.progress || 0})`;
 });
 
 api.onAvailChanged(async () => {

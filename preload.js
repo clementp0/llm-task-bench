@@ -3,6 +3,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('api', {
   i18n: () => ipcRenderer.invoke('i18n:get'),
   setLang: l => ipcRenderer.invoke('i18n:set', l),
+  exportPdf: name => ipcRenderer.invoke('run:exportPdf', name),
+  onUpdateStatus: cb => ipcRenderer.on('update:status', (_, s) => cb(s)),
   checkUpdate: () => ipcRenderer.invoke('update:check'),
   version: () => ipcRenderer.invoke('app:version'),
   accent: () => ipcRenderer.invoke('ui:accent'),

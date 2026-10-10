@@ -159,5 +159,8 @@
   "update.checkFailed": "Impossible de vérifier les mises à jour.",
   "update.failed": "La mise à jour a échoué.",
   "update.busy": "Un run est en cours. Relancez la mise à jour quand il est terminé.",
-  "update.noWrite": "L'app ne peut pas se remplacer dans ce dossier. La page de téléchargement va s'ouvrir."
+  "update.noWrite": "L'app ne peut pas se remplacer dans ce dossier. La page de téléchargement va s'ouvrir.",
+  "run.exportPdf": "Exporter en PDF",
+  "update.downloading": "Téléchargement de la version {version}… {pct} %",
+  "update.installing": "Installation de la version {version}, l'app va redémarrer…"
 }

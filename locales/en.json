@@ -159,5 +159,8 @@
   "update.checkFailed": "Couldn't check for updates.",
   "update.failed": "The update failed.",
   "update.busy": "A run is in progress. Try again once it's finished.",
-  "update.noWrite": "The app can't replace itself in this folder. The download page will open."
+  "update.noWrite": "The app can't replace itself in this folder. The download page will open.",
+  "run.exportPdf": "Export as PDF",
+  "update.downloading": "Downloading version {version}… {pct}%",
+  "update.installing": "Installing version {version}, the app will restart…"
 }
