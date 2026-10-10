@@ -10,6 +10,10 @@ Fonctionne avec Claude Code et OpenCode, donc avec tous les modèles déjà acce
 
 **[Télécharger la dernière version](https://github.com/clementp0/llm-task-bench/releases/latest)** · [Installation manuelle](install.md)
 
+Exemple : La même tâche FizzBuzz envoyée à 17 modèles. Le script doit s'exécuter et afficher « FizzBuzz » à la ligne 15.
+
+<img width="1392" height="914" alt="image" src="https://github.com/user-attachments/assets/66122873-6f8a-4fc9-937a-4ffb4b492a8e" />
+
 ## Fonctionnalités :
 
 - Détection des fournisseurs installés.
