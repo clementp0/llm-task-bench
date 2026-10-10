@@ -22,6 +22,6 @@ jobs:
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
       # electron-builder's own publish races when building several archs and creates duplicate releases.
-      - run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes dist/*.dmg dist/*.zip dist/*.blockmap dist/latest-mac.yml
+      - run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes dist/*.dmg dist/*.zip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

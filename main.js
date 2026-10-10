@@ -3,6 +3,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 const { execSync, spawnSync } = require('node:child_process');
 const bench = require('./lib/bench');
+const { checkForUpdates } = require('./lib/updater');
 
 // Apps launched from Finder don't inherit the shell PATH, so claude/opencode/git wouldn't be found.
 try {
@@ -25,7 +26,7 @@ function readJson(file, fallback) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return fallback; }
 }
 
-ipcMain.handle('i18n:get', () => {
+function loadI18n() {
   const langs = fs.readdirSync(localesDir).filter(f => f.endsWith('.json')).map(f => f.slice(0, -5));
   const load = l => readJson(path.join(localesDir, `${l}.json`), {});
   const system = (app.getPreferredSystemLanguages()[0] || app.getLocale()).toLowerCase();
@@ -39,7 +40,17 @@ ipcMain.handle('i18n:get', () => {
     names: Object.fromEntries(langs.map(l => [l, load(l)._name || l])),
     strings: { ...load('en'), ...load(lang) },
   };
-});
+}
+
+ipcMain.handle('i18n:get', loadI18n);
+
+function mainT(key, vars = {}) {
+  return (loadI18n().strings[key] ?? key).replace(/\{(\w+)\}/g, (_, n) => vars[n] ?? '');
+}
+
+const updateCheck = manual => checkForUpdates({ win, t: mainT, manual, isBusy: () => !!current });
+ipcMain.handle('update:check', () => updateCheck(true));
+ipcMain.handle('app:version', () => app.getVersion());
 
 ipcMain.handle('i18n:set', (_, lang) => {
   fs.writeFileSync(prefsFile(), JSON.stringify({ ...readJson(prefsFile(), {}), lang: lang === 'auto' ? undefined : lang }, null, 2));
@@ -206,6 +217,7 @@ app.whenReady().then(() => {
     webPreferences: { preload: path.join(__dirname, 'preload.js') },
   });
   win.loadFile(path.join(__dirname, 'ui/index.html'));
+  if (app.isPackaged) win.webContents.once('did-finish-load', () => setTimeout(() => updateCheck(false), 3000));
 });
 
 app.on('before-quit', () => current?.child?.kill());

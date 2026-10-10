@@ -144,6 +144,10 @@ function renderSettings() {
         <select id="s-lang">${langs.map(([v, name]) => `<option value="${esc(v)}" ${v === i18n.pref ? 'selected' : ''}>${esc(name)}</option>`).join('')}</select>
       </label>
     </div>
+    <h2>${t('update.title')}</h2>
+    <div class="group">
+      <div class="field"><span>${t('update.version')}</span><span class="grow">${esc(state.version)}</span><button class="btn small" id="update-check">${t('update.check')}</button></div>
+    </div>
     <div class="section-head"><h2>${t('settings.environment')}</h2><button class="btn small" id="env-refresh">${t('settings.refresh')}</button></div>
     <p class="hint">${t('settings.lead')}</p>
     <h2>${t('settings.tools')}</h2>
@@ -526,7 +530,11 @@ document.addEventListener('click', async e => {
   else if (btn.id === 'r-stop') api.stopRun();
   else if (btn.id === 'r-rerun') { fillForm(state.run); show('new'); }
   else if (btn.id === 'r-delete' && confirm(t('run.confirmDelete'))) { await api.deleteRun(state.run.id); show('new'); }
-  else if (btn.id === 'env-refresh') { state.env = null; renderSettings(); detect(); }
+  else if (btn.id === 'update-check') {
+    btn.disabled = true;
+    await api.checkUpdate();
+    btn.disabled = false;
+  } else if (btn.id === 'env-refresh') { state.env = null; renderSettings(); detect(); }
 });
 
 document.addEventListener('change', async e => {
@@ -561,6 +569,7 @@ function applyStatic() {
 
 (async () => {
   Object.assign(i18n, await api.i18n());
+  state.version = await api.version();
   applyStatic();
   const accent = await api.accent();
   if (accent) document.documentElement.style.setProperty('--accent', `#${accent.slice(0, 6)}`);

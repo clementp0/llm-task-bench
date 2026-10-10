@@ -148,5 +148,16 @@
   "mcp.tokenSaved": "Token saved.",
   "mcp.removeToken": "Remove",
   "mcp.tokenHelp": "Figma → Settings → Security → Personal access tokens. The token is encrypted with the macOS keychain.",
-  "run.viewOutput": "View output"
+  "run.viewOutput": "View output",
+  "update.title": "Updates",
+  "update.version": "Installed version",
+  "update.check": "Check for updates",
+  "update.available": "Version {version} is available (you have {current}). Update now?",
+  "update.install": "Update",
+  "update.later": "Later",
+  "update.upToDate": "You have the latest version ({version}).",
+  "update.checkFailed": "Couldn't check for updates.",
+  "update.failed": "The update failed.",
+  "update.busy": "A run is in progress. Try again once it's finished.",
+  "update.noWrite": "The app can't replace itself in this folder. The download page will open."
 }

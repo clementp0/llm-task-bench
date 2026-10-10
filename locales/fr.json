@@ -148,5 +148,16 @@
   "mcp.tokenSaved": "Token enregistré.",
   "mcp.removeToken": "Retirer",
   "mcp.tokenHelp": "Figma → Settings → Security → Personal access tokens. Le token est chiffré via le trousseau macOS.",
-  "run.viewOutput": "Voir la sortie"
+  "run.viewOutput": "Voir la sortie",
+  "update.title": "Mises à jour",
+  "update.version": "Version installée",
+  "update.check": "Rechercher une mise à jour",
+  "update.available": "La version {version} est disponible (vous avez la {current}). Mettre à jour maintenant ?",
+  "update.install": "Mettre à jour",
+  "update.later": "Plus tard",
+  "update.upToDate": "Vous avez la dernière version ({version}).",
+  "update.checkFailed": "Impossible de vérifier les mises à jour.",
+  "update.failed": "La mise à jour a échoué.",
+  "update.busy": "Un run est en cours. Relancez la mise à jour quand il est terminé.",
+  "update.noWrite": "L'app ne peut pas se remplacer dans ce dossier. La page de téléchargement va s'ouvrir."
 }

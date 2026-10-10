@@ -28,4 +28,11 @@ assert.strictEqual(s[0].score, 100);
 assert.deepStrictEqual(s[0].badges, ['best', 'cheapest', 'fastest']);
 assert.strictEqual(s[2].score, 0);
 
+const { isNewer } = require('./lib/updater');
+assert.ok(isNewer('v0.1.2', '0.1.1'));
+assert.ok(isNewer('0.2.0', '0.1.9'));
+assert.ok(isNewer('1.0.0', '0.10.0'));
+assert.ok(!isNewer('v0.1.1', '0.1.1'));
+assert.ok(!isNewer('0.1.0', '0.1.1'));
+
 console.log('ok');
