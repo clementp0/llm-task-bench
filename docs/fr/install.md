@@ -4,7 +4,7 @@
 
 ## Depuis la release
 
-1. Télécharge le `.dmg` depuis la [dernière release](https://github.com/clementp0/llm-task-bench/releases/latest).
+1. Télécharge le `.dmg` depuis la [dernière release](https://github.com/clementp0/llm-task-bench/releases/latest) : `arm64` pour les Mac Apple Silicon (M1 et suivants), `x64` pour les Mac Intel.
 2. Ouvre-le et glisse LLM Task Bench dans Applications.
 3. La première fois, fais un clic droit sur l'app et choisis **Ouvrir**. L'app n'est pas signée par Apple, macOS demande donc une seule fois.
 
