@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data:">
+  <title>LLM Task Bench</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <button class="btn new-run" data-view="new" data-i18n="nav.newRun"></button>
+    <h2 class="side-title" data-i18n="nav.runs"></h2>
+    <nav id="runs"></nav>
+    <button class="side-link" data-view="settings"><span id="env-dot" class="status"></span><span data-i18n="nav.settings"></span></button>
+  </aside>
+
+  <main>
+    <section class="view" id="view-new">
+      <header class="page-head">
+        <h1 data-i18n="new.title"></h1>
+        <div class="actions"><span id="f-estimate" class="estimate"></span><button class="btn primary" id="f-start" data-i18n="new.start"></button></div>
+      </header>
+      <p id="f-error" class="error" hidden></p>
+
+      <div class="columns">
+        <div class="col">
+          <h2 data-i18n="new.task"></h2>
+          <div class="group">
+            <label class="field"><span data-i18n="new.name"></span><input id="f-name" data-i18n-ph="new.namePh"></label>
+            <label class="field stacked"><span data-i18n="new.prompt"></span><textarea id="f-prompt" rows="6" data-i18n-ph="new.promptPh"></textarea></label>
+          </div>
+
+          <h2 data-i18n="new.verification"></h2>
+          <div class="group">
+            <label class="field"><span data-i18n="new.expect"></span><input id="f-expect" data-i18n-ph="new.expectPh"></label>
+            <label class="field"><span data-i18n="new.command"></span><input id="f-check" placeholder="! grep -rEq '#[0-9a-fA-F]{6}\b' assets"></label>
+          </div>
+          <p class="hint" data-i18n="new.checkHint"></p>
+
+          <h2 data-i18n="new.context"></h2>
+          <div class="group">
+            <div class="field"><span data-i18n="new.folder"></span>
+              <div class="folder"><span id="f-folder-label"></span><button class="btn small" id="f-folder-clear" data-i18n="new.removeFolder" hidden></button><button class="btn small" id="f-folder" data-i18n="new.choose"></button></div>
+            </div>
+            <label class="field"><span data-i18n="new.repeat"></span><input type="number" class="num" id="f-repeat" min="1" max="10" value="1"></label>
+            <label class="field"><span data-i18n="new.timeout"></span><input type="number" class="num" id="f-timeout" min="1" max="120" value="15"></label>
+          </div>
+          <p class="hint" data-i18n="new.contextHint"></p>
+
+          <h2>MCP</h2>
+          <div class="group" id="mcp-list"></div>
+          <details class="add-mcp">
+            <summary data-i18n="new.mcpAdd"></summary>
+            <div class="group">
+              <label class="field"><span data-i18n="new.mcpName"></span><input id="m-name" placeholder="my-mcp"></label>
+              <label class="field"><span data-i18n="new.mcpCmd"></span><input id="m-cmd" placeholder="npx -y mcp-package"></label>
+            </div>
+            <div class="row-end"><button class="btn small" id="m-add" data-i18n="new.add"></button></div>
+          </details>
+          <label class="check"><input type="checkbox" id="f-strict"> <span data-i18n="new.strict"></span></label>
+        </div>
+
+        <div class="col">
+          <div class="models-head">
+            <h2><span data-i18n="new.models"></span> <span id="sel-count" class="count"></span></h2>
+            <input type="search" id="f-filter" data-i18n-ph="new.filter">
+          </div>
+          <div id="model-groups" class="group models"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-run" hidden></section>
+    <section class="view" id="view-settings" hidden></section>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

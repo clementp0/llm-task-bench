@@ -1,0 +1,27 @@
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('api', {
+  i18n: () => ipcRenderer.invoke('i18n:get'),
+  setLang: l => ipcRenderer.invoke('i18n:set', l),
+  accent: () => ipcRenderer.invoke('ui:accent'),
+  detect: () => ipcRenderer.invoke('env:detect'),
+  listModels: () => ipcRenderer.invoke('models:list'),
+  hasSecret: k => ipcRenderer.invoke('secret:has', k),
+  setSecret: (k, v) => ipcRenderer.invoke('secret:set', k, v),
+  getMcp: () => ipcRenderer.invoke('mcp:get'),
+  setMcp: m => ipcRenderer.invoke('mcp:set', m),
+  probe: url => ipcRenderer.invoke('mcp:probe', url),
+  openPath: p => ipcRenderer.invoke('path:open', p),
+  availability: () => ipcRenderer.invoke('models:availability'),
+  probeModels: models => ipcRenderer.invoke('models:probe', models),
+  stats: () => ipcRenderer.invoke('stats:get'),
+  onProbe: cb => ipcRenderer.on('probe:update', (_, p) => cb(p)),
+  onAvailChanged: cb => ipcRenderer.on('avail:changed', cb),
+  pickFolder: () => ipcRenderer.invoke('folder:pick'),
+  listRuns: () => ipcRenderer.invoke('runs:list'),
+  getRun: id => ipcRenderer.invoke('runs:get', id),
+  deleteRun: id => ipcRenderer.invoke('runs:delete', id),
+  startRun: cfg => ipcRenderer.invoke('run:start', cfg),
+  stopRun: () => ipcRenderer.invoke('run:stop'),
+  onRunUpdate: cb => ipcRenderer.on('run:update', (_, run) => cb(run)),
+});

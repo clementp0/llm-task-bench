@@ -1,0 +1,39 @@
+{
+  "name": "llm-task-bench",
+  "productName": "LLM Task Bench",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Small Mac app to compare the LLMs you already use on your own prompts and repos.",
+  "author": "Clement Po",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clementp0/llm-task-bench.git"
+  },
+  "homepage": "https://github.com/clementp0/llm-task-bench",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test.js",
+    "dist": "electron-builder --mac dmg"
+  },
+  "build": {
+    "appId": "com.clementp0.llmtaskbench",
+    "productName": "LLM Task Bench",
+    "files": [
+      "main.js",
+      "preload.js",
+      "lib/**",
+      "ui/**",
+      "locales/**"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.developer-tools"
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.6.0",
+    "electron-builder": "^26.15.3"
+  }
+}
