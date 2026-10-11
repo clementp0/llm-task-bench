@@ -10,9 +10,10 @@ Fonctionne avec Claude Code et OpenCode, donc avec tous les modèles déjà acce
 
 **[Télécharger la dernière version](https://github.com/clementp0/llm-task-bench/releases/latest)** · [Installation manuelle](install.md)
 
-_Exemple : La même tâche FizzBuzz envoyée à 17 modèles. Le script doit s'exécuter et afficher « FizzBuzz » à la ligne 15.
+_Exemple : La même tâche FizzBuzz envoyée à 17 modèles. Le script doit s'exécuter et afficher « FizzBuzz » à la ligne 15._
 
-<img width="1392" height="914" alt="image" src="https://github.com/user-attachments/assets/66122873-6f8a-4fc9-937a-4ffb4b492a8e" />
+<img width="1450" height="972" alt="image" src="https://github.com/user-attachments/assets/de97d23a-6cbd-4211-a8b0-6cdc3006a444" />
+
 
 ## Fonctionnalités :
 
