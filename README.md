@@ -12,7 +12,8 @@ Works with Claude Code and OpenCode, so with every model already available throu
 
 _Example : Same FizzBuzz task sent to 17 models. The script has to run and print "FizzBuzz" on line 15._
 
-<img width="1392" height="914" alt="image" src="https://github.com/user-attachments/assets/66122873-6f8a-4fc9-937a-4ffb4b492a8e" />
+<img width="1450" height="972" alt="image" src="https://github.com/user-attachments/assets/ddddb904-c94f-495f-afde-bf0073fa1cd5" />
+
 
 ## Features:
 
