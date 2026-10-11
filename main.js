@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, shell, safeStorage, systemPreferences } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell, safeStorage, nativeTheme } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { execSync, spawnSync } = require('node:child_process');
@@ -63,12 +63,21 @@ ipcMain.handle('run:exportPdf', async (_, name) => {
   return filePath;
 });
 
+const THEMES = ['light', 'dark', 'system'];
+const readTheme = () => (THEMES.includes(readJson(prefsFile(), {}).theme) ? readJson(prefsFile(), {}).theme : 'dark');
+
+ipcMain.handle('theme:get', readTheme);
+ipcMain.handle('theme:set', (_, theme) => {
+  if (!THEMES.includes(theme)) return;
+  fs.writeFileSync(prefsFile(), JSON.stringify({ ...readJson(prefsFile(), {}), theme }, null, 2));
+  nativeTheme.themeSource = theme;
+});
+
 ipcMain.handle('i18n:set', (_, lang) => {
   fs.writeFileSync(prefsFile(), JSON.stringify({ ...readJson(prefsFile(), {}), lang: lang === 'auto' ? undefined : lang }, null, 2));
 });
 
 ipcMain.handle('models:list', () => bench.listModels(process.env));
-ipcMain.handle('ui:accent', () => systemPreferences.getAccentColor());
 
 ipcMain.handle('env:detect', () =>
   ['claude', 'opencode', 'codex'].map(cmd => {
@@ -213,6 +222,7 @@ ipcMain.handle('run:stop', () => {
 });
 
 app.whenReady().then(() => {
+  nativeTheme.themeSource = readTheme();
   const icon = path.join(__dirname, 'build/icon.png');
   if (!app.isPackaged && fs.existsSync(icon)) app.dock?.setIcon(icon);
   fs.mkdirSync(runsDir(), { recursive: true });

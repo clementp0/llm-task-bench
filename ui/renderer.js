@@ -138,6 +138,12 @@ function renderSettings() {
   const langs = [['auto', t('settings.auto', { lang: i18n.names[i18n.auto] })], ...Object.entries(i18n.names)];
   $('#view-settings').innerHTML = `
     <header class="page-head"><h1>${t('settings.title')}</h1></header>
+    <h2>${t('theme.title')}</h2>
+    <div class="group">
+      <div class="field"><span>${t('theme.label')}</span>
+        <div class="segmented" role="group">${['light', 'dark', 'system'].map(v => `<button class="${state.theme === v ? 'on' : ''}" data-theme-pick="${v}" aria-pressed="${state.theme === v}">${t(`theme.${v}`)}</button>`).join('')}</div>
+      </div>
+    </div>
     <h2>${t('settings.language')}</h2>
     <div class="group">
       <label class="field"><span>${t('settings.languageLabel')}</span>
@@ -204,27 +210,35 @@ function timeCost(rows) {
   </figure>`;
 }
 
+const gap = (r, leader) => {
+  const d = r.avgMs - leader.avgMs;
+  return `${d < 0 ? '−' : '+'}${fmt.ms(Math.abs(d))}`;
+};
+
 function graph(rows) {
-  const w = rows[0];
-  const top = rows.slice(0, 15);
-  return `<div class="winner">
-      <p class="winner-label">${t('run.winner')}</p>
-      <p class="winner-name">${esc(w.model)}</p>
-      <p class="muted">${t('run.winnerMeta', { score: w.score, time: fmt.ms(w.avgMs), cost: fmt.usd(w.avgCost), success: fmt.pct(w.successRate) })}</p>
-    </div>
-    <figure class="score-chart">
-      <div class="score-row head"><span></span><span></span><span>${t('run.col.score')}</span><span></span><span class="num">${t('run.col.time')}</span><span class="num">${t('run.col.cost')}</span><span></span></div>
-      ${top.map((r, i) => `<div class="score-row ${i === 0 ? 'first' : ''}" title="${esc(`${r.model} · ${fmt.pct(r.successRate)} · ${fmt.tok(r.avgTokens)} ${t('run.tokens')}`)}">
-        <span class="rank num">${i + 1}</span>
+  const leader = rows[0];
+  const step = (r, place) => !r ? '<div></div>' : `<div class="place">
+      <span class="place-name">${esc(short(r.model))} ${jump(r)}</span>
+      <span class="place-meta">${t('run.col.score').toLowerCase()} ${r.score} · ${fmt.ms(r.avgMs)}${place > 1 ? ` (${gap(r, leader)})` : ''}<br>${fmt.tok(r.avgTokens)} ${t('run.tokens')} · ${fmt.usd(r.avgCost)}</span>
+      <div class="block p${place}">${place}</div>
+    </div>`;
+  const rest = rows.slice(3, 15);
+  return `<div class="podium">${step(rows[1], 2)}${step(rows[0], 1)}${step(rows[2], 3)}</div>
+    ${rest.length ? `<figure class="score-chart">
+      <div class="score-row head"><span></span><span></span><span>${t('run.col.score')}</span><span></span><span class="num">${t('run.col.time')}</span><span class="num">${t('run.col.gap')}</span><span class="num">${t('run.col.tokens')}</span><span class="num">${t('run.col.cost')}</span><span></span></div>
+      ${rest.map((r, i) => `<div class="score-row" title="${esc(`${r.model} · ${fmt.pct(r.successRate)} · ${fmt.tok(r.avgTokens)} ${t('run.tokens')}`)}">
+        <span class="rank num">${i + 4}</span>
         <span class="bar-name">${esc(short(r.model))}</span>
         <span class="track"><i style="width:${Math.max(r.score, 1)}%"></i></span>
         <b class="num">${r.score}</b>
         <span class="num muted">${fmt.ms(r.avgMs)}</span>
+        <span class="num muted">${gap(r, leader)}</span>
+        <span class="num muted">${fmt.tok(r.avgTokens)}</span>
         <span class="num muted">${fmt.usd(r.avgCost)}</span>
         ${jump(r)}
       </div>`).join('')}
-      <figcaption>${t('run.graphCaption')}${rows.length > top.length ? ` ${t('run.chartMore', { n: rows.length - top.length })}` : ''}</figcaption>
-    </figure>`;
+    </figure>` : ''}
+    <p class="note">${t('run.graphCaption')}${rows.length > 15 ? ` ${t('run.chartMore', { n: rows.length - 15 })}` : ''}</p>`;
 }
 
 function renderRun() {
@@ -243,6 +257,7 @@ function renderRun() {
       <td><span class="model">${esc(s.model)}</span><small>${HARNESS[s.harness]}${s.badges?.length ? ` — ${s.badges.map(b => t(`note.${b}`)).join(', ')}` : ''}</small></td>
       <td class="num ${s.successRate === 1 ? 'ok' : s.successRate ? 'warn' : 'ko'}">${fmt.pct(s.successRate)}</td>
       <td class="num">${fmt.ms(s.avgMs)}</td>
+      <td class="num muted">${i ? gap(s, ok[0]) : '—'}</td>
       <td class="num">${fmt.tok(s.avgTokens)}</td>
       <td class="num">${fmt.usd(s.avgCost)}</td>
       <td class="num">${fmt.usd(s.costPerSuccess)}</td>
@@ -288,19 +303,19 @@ function renderRun() {
     ${r.status === 'running' ? `<div class="progress"><span style="transform:scaleX(${done / total})"></span></div>` : ''}
     ${r.error ? `<pre class="ko">${esc(r.error)}</pre>` : ''}
     <blockquote class="prompt">${esc(r.prompt)}</blockquote>
-    ${ok.length ? `<div class="section-head"><h2>${t('run.ranking')}</h2>
+    ${ok.length ? `<div class="section-head ranking-head"><h2>${t('run.ranking')}</h2>
       <div class="segmented" role="group">${['graph', 'timecost', 'table'].map(v => `<button class="${state.runView === v ? 'on' : ''}" data-runview="${v}" aria-pressed="${state.runView === v}">${t(`run.view.${v}`)}</button>`).join('')}</div></div>` : ''}
     ${ok.length && state.runView === 'graph' ? graph(ok) : ''}
     ${ok.length && state.runView === 'timecost' ? timeCost(ok) : ''}
     ${rows && state.runView === 'table' ? `<table>
-      <thead><tr><th class="num">#</th><th>${t('run.col.model')}</th>${['success', 'time', 'tokens', 'cost', 'costPerSuccess', 'files', 'score'].map(c => `<th class="num">${t(`run.col.${c}`)}</th>`).join('')}<th></th></tr></thead>
+      <thead><tr><th class="num">#</th><th>${t('run.col.model')}</th>${['success', 'time', 'gap', 'tokens', 'cost', 'costPerSuccess', 'files', 'score'].map(c => `<th class="num">${t(`run.col.${c}`)}</th>`).join('')}<th></th></tr></thead>
       <tbody>${rows}</tbody></table>
       <p class="hint">${t('run.tableHint')}</p>` : ''}
     ${failed.length ? `<details class="failed">
       <summary>${t('run.failed', { n: failed.length })}</summary>
       <p class="hint">${t('run.failedHint')}</p>
       <table><tbody>${failed.map(s => `
-        <tr><td><span class="model">${esc(s.model)}</span><small>${HARNESS[s.harness]}</small></td><td class="reason">${esc(failReason(r, s))}</td></tr>`).join('')}
+        <tr><td><span class="dnf">DNF</span><span class="model">${esc(s.model)}</span><small>${HARNESS[s.harness]}</small></td><td class="reason">${esc(failReason(r, s))}</td></tr>`).join('')}
       </tbody></table>
     </details>` : ''}
     <div class="section-head attempts-head"><h2>${t('run.attempts')}</h2>${hasOutputs ? `<button class="btn small" data-open="${esc(r.outputsDir)}">${t('run.openOutputs')}</button>` : ''}</div>
@@ -466,6 +481,12 @@ document.addEventListener('click', async e => {
   else if (btn.dataset.run) openRun(btn.dataset.run);
   else if (btn.dataset.open) api.openPath(btn.dataset.open);
   else if (btn.dataset.jump) openAttempts(btn.dataset.jump);
+  else if (btn.dataset.themePick || btn.id === 'theme-toggle') {
+    const dark = state.theme === 'dark' || (state.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+    state.theme = btn.dataset.themePick || (dark ? 'light' : 'dark');
+    await api.setTheme(state.theme);
+    if (!$('#view-settings').hidden) renderSettings();
+  }
   else if (btn.dataset.runview) {
     state.runView = btn.dataset.runview;
     try { localStorage.setItem('llm-task-bench:runview', state.runView); } catch {}
@@ -570,14 +591,14 @@ function applyStatic() {
   document.documentElement.lang = i18n.lang;
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = el.ariaLabel = t(el.dataset.i18nTitle); });
 }
 
 (async () => {
   Object.assign(i18n, await api.i18n());
   state.version = await api.version();
+  state.theme = await api.getTheme();
   applyStatic();
-  const accent = await api.accent();
-  if (accent) document.documentElement.style.setProperty('--accent', `#${accent.slice(0, 6)}`);
   state.custom = await api.getMcp();
   state.tokens.figma = await api.hasSecret('figma');
   let saved = {};

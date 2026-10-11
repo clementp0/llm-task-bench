@@ -117,9 +117,7 @@
   "run.ranking": "Ranking",
   "run.view.graph": "Chart",
   "run.view.table": "Table",
-  "run.winner": "Best ratio",
-  "run.winnerMeta": "Score {score}, {time} on average, {cost} per attempt, {success} success",
-  "run.graphCaption": "Score out of 100: success, cost and time relative to the best model.",
+  "run.graphCaption": "Score out of 100: success, cost and time compared to the best. Gap = extra time versus 1st.",
   "est.unknown_one": "Unknown cost for {n} untested model",
   "est.unknown_other": "Unknown cost for {n} untested models",
   "est.confirm": "This run will start {n} attempts.\nEstimate from your previous runs: ≈ {tokens} tokens, ≈ {cost}.\nModels without history (unknown cost): {unknown}.\n\nStart anyway?",
@@ -162,5 +160,15 @@
   "update.noWrite": "The app can't replace itself in this folder. The download page will open.",
   "run.exportPdf": "Export as PDF",
   "update.downloading": "Downloading version {version}… {pct}%",
-  "update.installing": "Installing version {version}, the app will restart…"
+  "update.installing": "Installing version {version}, the app will restart…",
+  "run.col.gap": "Gap",
+  "run.place1": "1st",
+  "run.place2": "2nd",
+  "run.place3": "3rd",
+  "theme.title": "Appearance",
+  "theme.label": "Theme",
+  "theme.light": "Light",
+  "theme.dark": "Dark",
+  "theme.system": "System",
+  "theme.toggle": "Toggle light / dark"
 }

@@ -117,9 +117,7 @@
   "run.ranking": "Classement",
   "run.view.graph": "Graphique",
   "run.view.table": "Tableau",
-  "run.winner": "Meilleur ratio",
-  "run.winnerMeta": "Score {score}, {time} en moyenne, {cost} par essai, {success} de réussite",
-  "run.graphCaption": "Score sur 100 : réussite, coût et temps relatifs au meilleur modèle.",
+  "run.graphCaption": "Score sur 100 : réussite, coût et temps comparés au meilleur. Écart = temps de plus que le 1er.",
   "est.unknown_one": "Coût inconnu pour {n} modèle jamais testé",
   "est.unknown_other": "Coût inconnu pour {n} modèles jamais testés",
   "est.confirm": "Ce run va lancer {n} essais.\nEstimation d'après tes runs précédents : ≈ {tokens} tokens, ≈ {cost}.\nModèles sans historique (coût inconnu) : {unknown}.\n\nLancer quand même ?",
@@ -162,5 +160,15 @@
   "update.noWrite": "L'app ne peut pas se remplacer dans ce dossier. La page de téléchargement va s'ouvrir.",
   "run.exportPdf": "Exporter en PDF",
   "update.downloading": "Téléchargement de la version {version}… {pct} %",
-  "update.installing": "Installation de la version {version}, l'app va redémarrer…"
+  "update.installing": "Installation de la version {version}, l'app va redémarrer…",
+  "run.col.gap": "Écart",
+  "run.place1": "1er",
+  "run.place2": "2e",
+  "run.place3": "3e",
+  "theme.title": "Apparence",
+  "theme.label": "Thème",
+  "theme.light": "Clair",
+  "theme.dark": "Sombre",
+  "theme.system": "Système",
+  "theme.toggle": "Basculer clair / sombre"
 }
